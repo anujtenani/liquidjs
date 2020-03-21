@@ -17,7 +17,7 @@ export default {
     const filepath = ctx.opts.dynamicPartials
       ? (TypeGuards.isQuotedToken(file)
         ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
-        : evalToken(this.file, ctx))
+        : yield evalToken(this.file, ctx))
       : file.getText()
     assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
 

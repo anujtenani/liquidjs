@@ -35,7 +35,7 @@ export class Expression {
     return this.operands[0]
   }
   public * value (ctx: Context) {
-    return toValue(this.evaluate(ctx))
+    return toValue(yield this.evaluate(ctx))
   }
 }
 
@@ -71,9 +71,9 @@ function evalLiteralToken (token: LiteralToken) {
   return literalValues[token.literal]
 }
 
-function evalRangeToken (token: RangeToken, ctx: Context) {
-  const low: number = evalToken(token.lhs, ctx)
-  const high: number = evalToken(token.rhs, ctx)
+function * evalRangeToken (token: RangeToken, ctx: Context) {
+  const low: number = yield evalToken(token.lhs, ctx)
+  const high: number = yield evalToken(token.rhs, ctx)
   return range(+low, +high + 1)
 }
 

@@ -30,7 +30,7 @@ export default {
   },
 
   render: function * (ctx: Context, emitter: Emitter) {
-    let collection = toCollection(evalToken(this.collection, ctx))
+    let collection = toCollection(yield evalToken(this.collection, ctx))
     const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit

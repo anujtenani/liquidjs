@@ -45,7 +45,7 @@ export default {
     const filepath = ctx.opts.dynamicPartials
       ? (TypeGuards.isQuotedToken(file)
         ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
-        : evalToken(file, ctx))
+        : yield evalToken(file, ctx))
       : file.getText()
     assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
 
@@ -53,13 +53,13 @@ export default {
     const scope = yield hash.render(ctx)
     if (this['with']) {
       const { value, alias } = this['with']
-      scope[alias || filepath] = evalToken(value, ctx)
+      scope[alias || filepath] = yield evalToken(value, ctx)
     }
     childCtx.push(scope)
 
     if (this['for']) {
       const { value, alias } = this['for']
-      let collection = evalToken(value, ctx)
+      let collection = yield evalToken(value, ctx)
       collection = toCollection(collection)
       scope['forloop'] = new ForloopDrop(collection.length)
       for (const item of collection) {

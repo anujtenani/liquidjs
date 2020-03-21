@@ -36,7 +36,7 @@ export default {
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    let collection = toCollection(evalToken(this.collection, ctx))
+    let collection = toCollection(yield evalToken(this.collection, ctx))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)

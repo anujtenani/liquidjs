@@ -66,14 +66,16 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: string) {
+export function readProperty (obj: any, key: string): any {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
+  if (obj instanceof Promise) return obj.then((Cmp:any)=> readProperty(Cmp, key))
   if (obj instanceof Drop) {
     if (isFunction(obj[key])) return obj[key]()
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
   }
+  if (isFunction(obj[key])) return obj[key]()
   if (key === 'size') return readSize(obj)
   if (key === 'first') return readFirst(obj)
   if (key === 'last') return readLast(obj)
