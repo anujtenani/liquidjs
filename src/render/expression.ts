@@ -21,7 +21,7 @@ export class Expression {
     const tokenizer = new Tokenizer(str)
     this.postfix = toPostfix(tokenizer.readExpression())
   }
-  public evaluate (ctx: Context): any {
+  public * evaluate (ctx: Context): any {
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
         const r = this.operands.pop()
@@ -29,7 +29,7 @@ export class Expression {
         const result = evalOperatorToken(token, l, r)
         this.operands.push(result)
       } else {
-        this.operands.push(evalToken(token, ctx))
+        this.operands.push(yield evalToken(token, ctx))
       }
     }
     return this.operands[0]
